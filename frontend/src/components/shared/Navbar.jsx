@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { LogOut, User, Menu } from 'lucide-react'; // Import the Menu icon from lucide-react
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
 
@@ -43,8 +44,8 @@ const Navbar = () => {
                     {/* User Actions: Login/Signup or Avatar */}
                     {!user ? (
                         <div className='flex items-center gap-2'>
-                            <Button variant='outline' className='text-sm sm:text-base'>Login</Button>
-                            <Button className='bg-[#6A38C2] hover:bg-[#582ea0] text-sm sm:text-base'>Signup</Button>
+                            <Link to={'/login'}><Button variant='outline' className='text-sm sm:text-base'>Login</Button></Link>
+                            <Link to={'/signup'}> <Button className='bg-[#6A38C2] hover:bg-[#582ea0] text-sm sm:text-base'>Signup</Button></Link>
                         </div>
                     ) : (
                         <Popover>
@@ -96,8 +97,12 @@ const Navbar = () => {
                         {/* User Actions: Login/Signup or Avatar */}
                         {!user ? (
                             <div className='mt-4 flex flex-col gap-2'>
-                                <Button variant='outline' className='w-full text-sm'>Login</Button>
-                                <Button className='bg-[#6A38C2] hover:bg-[#582ea0] w-full text-sm'>Signup</Button>
+                                <Link to={'/login'} className='w-full'>
+                                    <Button variant='outline' className='text-sm sm:text-base w-full'>Login</Button>
+                                </Link>
+                                <Link to={'/signup'} className='w-full'>
+                                    <Button className='bg-[#6A38C2] hover:bg-[#582ea0] text-sm sm:text-base w-full'>Signup</Button>
+                                </Link>
                             </div>
                         ) : (
                             <div className='mt-4 flex flex-col gap-2'>
