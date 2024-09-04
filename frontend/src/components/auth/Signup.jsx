@@ -51,6 +51,7 @@ const Signup = () => {
                             <Input accept="image/*" type="file" className='cursor-pointer' />
                         </div>
                     </div>
+                    {/* buttons */}
                     <Button className='text-sm sm:text-base w-full my-2'>Sign up</Button>
                     <span className='text-sm'>Already have an account? <Link className='text-blue-600' to={'/login'}> Login </Link></span>
 
