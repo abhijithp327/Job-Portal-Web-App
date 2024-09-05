@@ -15,7 +15,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className='bg-white shadow'>
+        <div className='bg-white'>
             <div className='flex items-center justify-between mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16'>
                 {/* Brand Logo */}
                 <div>

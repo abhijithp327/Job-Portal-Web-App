@@ -13,8 +13,7 @@ export const register = async (req, res) => {
     try {
 
         const { fullname, email, phoneNumber, password, role } = req.body;
-
-
+    
         // Register user validation 
         const schema = Joi.object({
             fullname: Joi.string().required().label("FullName"),
