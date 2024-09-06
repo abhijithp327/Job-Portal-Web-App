@@ -4,11 +4,13 @@ import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { LogOut, User, Menu } from 'lucide-react'; // Import the Menu icon from lucide-react
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
 
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const user = false;
+
+    const {user} = useSelector((state) => state.auth);
 
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!isMobileMenuOpen);

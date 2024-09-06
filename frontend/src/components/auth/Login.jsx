@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader2 } from 'lucide-react';
-import { setLoading } from '@/redux/authSlice';
+import { setLoading, setUser } from '@/redux/authSlice';
 
 const Login = () => {
 
@@ -44,10 +44,9 @@ const Login = () => {
                 withCredentials: true
             });
             if (response.data.status === 200) {
+                dispatch(setUser(response.data.result.user));
                 navigate('/');
                 toast.success(response.data.message);
-            } else {
-
             }
         } catch (error) {
             toast.error(error.response.data.message);
