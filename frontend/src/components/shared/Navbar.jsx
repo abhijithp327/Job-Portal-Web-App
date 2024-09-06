@@ -15,7 +15,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className='bg-white'>
+        <div className='fixed top-0 w-full z-50 bg-white shadow-md'>
             <div className='flex items-center justify-between mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16'>
                 {/* Brand Logo */}
                 <div>
@@ -36,9 +36,9 @@ const Navbar = () => {
                 <div className='hidden sm:flex items-center gap-6 sm:gap-10'>
                     {/* Navbar Links */}
                     <ul className='flex font-medium gap-3 sm:gap-5'>
-                        <li>Home</li>
-                        <li>Jobs</li>
-                        <li>Browse</li>
+                        <li><Link to={'/'}>Home</Link></li>
+                        <li><Link to={'/jobs'}>Jobs</Link></li>
+                        <li><Link to={'/browse'}>Browse</Link></li>
                     </ul>
 
                     {/* User Actions: Login/Signup or Avatar */}

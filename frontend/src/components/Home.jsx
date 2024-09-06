@@ -7,12 +7,12 @@ import Footer from './Footer';
 
 const Home = () => {
     return (
-        <div>
+        <div className='pt-16'>
             <Navbar />
             <HeroSection />
             <CategoryCarousel />
             <LatestJobs />
-            {/* <Footer /> */}
+            <Footer />
         </div>
     )
 };

@@ -77,7 +77,7 @@ const Signup = () => {
     };
 
     return (
-        <div className='h-[90vh]'>
+        <div className='h-[90vh] pt-16'>
             <Navbar />
             {/* form */}
             <div className='flex items-center justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
