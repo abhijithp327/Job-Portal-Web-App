@@ -169,7 +169,7 @@ const Signup = () => {
                     </div>
                     {/* buttons */}
                     {
-                        loading ? <Button className='w-full my-1'><Loader2 className='mr-2 h-4 w-4 animate-spin' />Please wait</Button> : <Button className='text-sm sm:text-base w-full my-1'>Signup</Button>
+                        loading ? <Button className='w-full my-1'><Loader2 className='mr-2 h-4 w-4 animate-spin' />Please wait</Button> : <Button className='text-sm sm:text-base w-full my-4'>Signup</Button>
                     }
                     <span className='text-sm'>Already have an account? <Link className='text-blue-600' to={'/login'}> Login </Link></span>
 
