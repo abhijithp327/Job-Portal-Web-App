@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import getDataUri from '../utils/dataUri.js';
 import cloudinary from '../utils/cloudinary.js';
+import { profile } from 'console';
 
 dotenv.config();
 
@@ -15,6 +16,12 @@ export const register = async (req, res) => {
     try {
 
         const { fullname, email, phoneNumber, password, role } = req.body;
+
+        const file = req.file;
+
+        const fileUri = getDataUri(file);
+
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
         // Register user validation 
         const schema = Joi.object({
@@ -40,7 +47,7 @@ export const register = async (req, res) => {
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Validation Error",
+                message: error?.details[0].message,
                 error: getErrorsInArray(error?.details),
             });
         };
@@ -63,6 +70,9 @@ export const register = async (req, res) => {
             phoneNumber,
             role,
             password: hashPassword,
+            profile: {
+                profilePhoto: cloudResponse.secure_url,
+            }
         });
 
         res.status(200).json({
@@ -250,7 +260,7 @@ export const updateProfile = async (req, res) => {
             updatedFields.profile.resume = cloudResponse.secure_url;
             updatedFields.profile.resumeOriginalName = file.originalname;
         }
-        
+
         const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, { new: true, select: "-password" });
 
         res.status(200).json({
