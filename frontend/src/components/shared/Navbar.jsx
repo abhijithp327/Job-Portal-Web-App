@@ -3,10 +3,18 @@ import React, { useState } from 'react';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { LogOut, Menu, User2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'sonner';
+import { USER_API_END_POINT } from '@/utils/constant';
+import { setUser } from '@/redux/authSlice';
+import axios from 'axios';
 
 const Navbar = () => {
+
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -15,6 +23,23 @@ const Navbar = () => {
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!isMobileMenuOpen);
     };
+
+    const logoutHandler = async () => {
+        try {
+            const response = await axios.get(`${USER_API_END_POINT}/logout`, {
+                withCredentials: true
+            })
+            console.log(response.data);
+            if (response.data.status === 200) {
+                toast.success(response.data.message);
+                dispatch(setUser(null));
+                navigate('/');
+            }
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log(error);
+        }
+    }
 
     return (
         <div className='fixed top-0 w-full z-50 bg-white shadow-md'>
@@ -78,7 +103,7 @@ const Navbar = () => {
                                         </div>
                                         <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                             <LogOut />
-                                            <Button variant='link'>Logout</Button>
+                                            <Button onClick={logoutHandler} variant='link'>Logout</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +139,7 @@ const Navbar = () => {
                                     <User2 />
                                     <Link to='/profile'>View Profile</Link>
                                 </Button>
-                                <Button variant='link' className='flex items-center gap-2'><LogOut /> Logout</Button>
+                                <Button onClick={logoutHandler} variant='link' className='flex items-center gap-2'><LogOut />Logout</Button>
                             </div>
                         )}
                     </div>
