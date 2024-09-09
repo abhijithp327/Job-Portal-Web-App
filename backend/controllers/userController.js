@@ -13,7 +13,7 @@ export const register = async (req, res) => {
     try {
 
         const { fullname, email, phoneNumber, password, role } = req.body;
-    
+
         // Register user validation 
         const schema = Joi.object({
             fullname: Joi.string().required().label("FullName"),
@@ -157,6 +157,7 @@ export const login = async (req, res) => {
                     email: user.email,
                     phoneNumber: user.phoneNumber,
                     role: user.role,
+                    profile: user.profile
                 }
             }
         });
@@ -203,6 +204,14 @@ export const updateProfile = async (req, res) => {
 
         const { fullname, email, phoneNumber, bio, skills } = req.body;
 
+        let skillsArray
+
+        if (skills) {
+            skillsArray = skills.split(',');
+        };
+
+        // console.log(req.body);
+
         const user = await User.findById(userId);
 
         if (!user) {
@@ -217,8 +226,8 @@ export const updateProfile = async (req, res) => {
             fullname,
             email,
             phoneNumber,
-            bio,
-            skills
+            "profile.bio": bio,
+            "profile.skills": skillsArray,
         }, {
             new: true,
             select: '-password'

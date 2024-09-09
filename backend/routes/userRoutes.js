@@ -11,7 +11,7 @@ router.post("/register", singleUpload, register);
 // login user
 router.post("/login", singleUpload, login);
 // update user profile
-router.put("/update-profile", isAuthenticated, updateProfile);
+router.put("/update-profile", isAuthenticated, singleUpload, updateProfile);
 // logout user
 router.get("/logout", isAuthenticated, logout);
 
