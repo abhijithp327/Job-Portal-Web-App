@@ -2,7 +2,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import React, { useState } from 'react';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { LogOut, User, Menu } from 'lucide-react'; // Import the Menu icon from lucide-react
+import { LogOut, Menu, User2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -10,7 +10,7 @@ const Navbar = () => {
 
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const {user} = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
 
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!isMobileMenuOpen);
@@ -71,8 +71,10 @@ const Navbar = () => {
                                     {/* Profile and Logout Buttons */}
                                     <div className='flex flex-col my-2 cursor-pointer'>
                                         <div className='flex w-fit items-center gap-2 cursor-pointer'>
-                                            <User />
-                                            <Button variant='link'>View Profile</Button>
+                                            <User2 />
+                                            <Button variant='link'>
+                                                <Link to='/profile'>View Profile</Link>
+                                            </Button>
                                         </div>
                                         <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                             <LogOut />
@@ -108,7 +110,10 @@ const Navbar = () => {
                             </div>
                         ) : (
                             <div className='mt-4 flex flex-col gap-2'>
-                                <Button variant='link' className='flex items-center gap-2'><User /> View Profile</Button>
+                                <Button variant='link' className='flex items-center gap-2'>
+                                    <User2 />
+                                    <Link to='/profile'>View Profile</Link>
+                                </Button>
                                 <Button variant='link' className='flex items-center gap-2'><LogOut /> Logout</Button>
                             </div>
                         )}
