@@ -7,13 +7,16 @@ import { Badge } from './ui/badge';
 import { Label } from './ui/label';
 import AppliedJobs from './AppliedJobs';
 import EditUserProfileModal from './EditUserProfileModal';
+import { useSelector } from 'react-redux';
 
-const skills = ["Html", "Css", "Javascript", "React", "Tailwind", "Node"]
+// const skills = ["Html", "Css", "Javascript", "React", "Tailwind", "Node"]
 
 
 const Profile = () => {
 
     const [open, setOpen] = React.useState(false);
+
+    const { user } = useSelector((state) => state.auth);
 
     const isResume = true;
 
@@ -31,8 +34,8 @@ const Profile = () => {
                             <AvatarImage src="https://i.pinimg.com/736x/b0/33/c1/b033c1e388efef133716a5364a056ed9.jpg" alt="Avatar image" />
                         </Avatar>
                         <div className='text-center md:text-left'>
-                            <h1 className='font-medium text-xl md:text-xl'>Full Name</h1>
-                            <p className='text-sm text-gray-600'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam delectus impedit enim autem deleniti.</p>
+                            <h1 className='font-medium text-xl md:text-xl'>{user?.fullname}</h1>
+                            <p className='text-sm text-gray-600'>{user?.profile.bio}</p>
                         </div>
                     </div>
 
@@ -46,11 +49,11 @@ const Profile = () => {
                 <div className='mt-4'>
                     <div className='flex items-center gap-2 mt-2'>
                         <Mail w-5 h-5 />
-                        <span className='text-sm md:text-base'>abhijith@gmail.com</span>
+                        <span className='text-sm md:text-base'>{user?.email}</span>
                     </div>
                     <div className='flex items-center gap-2 mt-2'>
                         <Contact className='w-5 h-5' />
-                        <span className='text-sm md:text-base'>1234567890</span>
+                        <span className='text-sm md:text-base'>+91 {user?.phoneNumber}</span>
                     </div>
                 </div>
 
@@ -58,8 +61,8 @@ const Profile = () => {
                 <div className='mt-5'>
                     <h2 className='text-lg font-semibold'>Skills</h2>
                     <div className='flex flex-wrap gap-2 mt-2'>
-                        {skills.length !== 0 ? (
-                            skills.map((item, index) => <Badge key={index} className='text-xs md:text-sm'>{item}</Badge>)
+                        {user?.profile?.skills.length !== 0 ? (
+                           user?.profile?.skills?.map((item, index) => <Badge key={index} className='text-xs md:text-sm'>{item}</Badge>)
                         ) : (
                             <span className='text-sm text-gray-500'>NA</span>
                         )}
@@ -70,10 +73,10 @@ const Profile = () => {
                 <div className='mt-5'>
                     <Label className='text-md font-bold'>Resume</Label>
                     {
-                        isResume ?
-                            <a target='blank' href="https://www.youtube.com/watch?v=F5EYXc91Cpo&t=21531s"
+                        user?.profile?.resume ?
+                            <a target='blank' href={user?.profile?.resume}
                                 className='text-blue-700 hover:underline cursor-pointer text-sm md:text-base ml-2'
-                            > View Resume</a>
+                            >{user?.profile?.resumeOriginalName}</a>
                             : <span className='text-sm text-gray-500'>NA</span>
                     }
                 </div>

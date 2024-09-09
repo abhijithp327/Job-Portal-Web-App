@@ -46,16 +46,14 @@ const EditUserProfileModal = ({ open, setOpen }) => {
         formData.append('email', input.email);
         formData.append('phoneNumber', input.phoneNumber);
         formData.append('bio', input.bio);
-        // Split the skills string by commas and spaces, trim spaces, and filter out empty strings
-        const skillsArray = input.skills
-            .split(/[,\s]+/)       // Split by comma or any whitespace
-            .map(skill => skill.trim())  // Trim spaces around each skill
-            .filter(skill => skill.length > 0);  // Filter out empty strings
-        formData.append('skills', skillsArray);
-
-        if (input.file) formData.append('file', input.file);
+        formData.append('skills', input.skills);
+        // Attach the resume file only if it exists
+        if (input.file) {
+            formData.append('file', input.file);
+        }
 
         try {
+            setLoading(true);
             const response = await axios.put(`${USER_API_END_POINT}/update-profile`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -73,10 +71,11 @@ const EditUserProfileModal = ({ open, setOpen }) => {
         } catch (error) {
             toast.error(error.response.data.message);
             console.log(error);
+        } finally {
+            setLoading(false);
         }
         setOpen(false);
-        setLoading(false);
-        console.log(input);
+        // console.log("input", input);
     };
 
     return (

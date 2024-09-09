@@ -5,6 +5,8 @@ import User from '../models/userModel.js';
 import { joiOptions } from '../utils/joiOptions.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import getDataUri from '../utils/dataUri.js';
+import cloudinary from '../utils/cloudinary.js';
 
 dotenv.config();
 
@@ -204,15 +206,24 @@ export const updateProfile = async (req, res) => {
 
         const { fullname, email, phoneNumber, bio, skills } = req.body;
 
+        const file = req.file;
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        console.log(file);
+
+
+
         let skillsArray
 
         if (skills) {
             skillsArray = skills.split(',');
         };
 
+
         // console.log(req.body);
 
         const user = await User.findById(userId);
+
 
         if (!user) {
             return res.status(400).json({
@@ -222,7 +233,8 @@ export const updateProfile = async (req, res) => {
             });
         }
 
-        const updatedUser = await User.findByIdAndUpdate(user._id, {
+
+        const updatedFields = await User.findByIdAndUpdate(user._id, {
             fullname,
             email,
             phoneNumber,
@@ -232,6 +244,14 @@ export const updateProfile = async (req, res) => {
             new: true,
             select: '-password'
         });
+
+
+        if (cloudResponse) {
+            updatedFields.profile.resume = cloudResponse.secure_url;
+            updatedFields.profile.resumeOriginalName = file.originalname;
+        }
+        
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, { new: true, select: "-password" });
 
         res.status(200).json({
             status: 200,
