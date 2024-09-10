@@ -5,6 +5,7 @@ import { } from '@radix-ui/react-avatar'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
 import { useNavigate } from 'react-router-dom'
+import { formatDate } from '@/utils/formatDate'
 
 
 
@@ -17,7 +18,7 @@ const Job = ({ job }) => {
     return (
         <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100'>
             <div className='flex items-center justify-between mb-3'>
-                <p className='text-sm text-gray-500'>{job?.createdAt}</p>
+                <p className='text-sm text-gray-500'>{formatDate(job?.createdAt) === 0 ? "Today" : `${formatDate(job?.createdAt)} Days Ago`}</p>
                 <Button variant='outline' className='rounded-full' size='icon'>
                     <Bookmark />
                 </Button>
@@ -42,9 +43,9 @@ const Job = ({ job }) => {
             <div className='flex flex-wrap items-center gap-2 mt-4'>
                 <Badge className='text-blue-700 font-bold' variant='ghost'>{job?.position} positions</Badge>
                 <Badge className='text-[#F83002] font-bold' variant='ghost'>Job type: {job?.jobType}</Badge>
-                <Badge className='text-[#7209b7] font-bold' variant='ghost'>Salary: {job?.salary}</Badge>
+                <Badge className='text-[#7209b7] font-bold' variant='ghost'>{job?.salary} LPA</Badge>
             </div>
-             {/* Action Buttons */}
+            {/* Action Buttons */}
             <div className='flex flex-wrap items-center gap-4 mt-4'>
                 <Button variant='outline' onClick={() => navigate(`/description/${job._id}`)} >Details</Button>
                 <Button className='bg-[#7209b7] hover:bg-[#4e298f]'>Save for later</Button>

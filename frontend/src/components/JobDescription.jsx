@@ -1,22 +1,58 @@
 import { Badge } from './ui/badge';
 import React from 'react';
 import { Button } from './ui/button';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { setSingleJob } from '@/redux/jobSlice';
+import { JOB_API_END_POINT } from '@/utils/constant';
+import { useDispatch, useSelector } from 'react-redux';
+import { formatDate } from '@/utils/formatDate';
 
 const JobDescription = () => {
+
+    const dispatch = useDispatch();
+
+    const params = useParams();
+    const jobId = params.id;
+
+    const { singleJob } = useSelector(state => state.job);
+
+    const { user } = useSelector(state => state.auth);
+
+    React.useEffect(() => {
+        const fetchSingleJob = async () => {
+            try {
+
+                const response = await axios.get(`${JOB_API_END_POINT}/get-job/${jobId}`, {
+                    withCredentials: true
+                });
+
+                // console.log(response.data);
+
+                if (response.data.status === 200) {
+                    dispatch(setSingleJob(response.data.result));
+                };
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchSingleJob();
+    }, [jobId, dispatch]);
 
     const isApplied = false;
 
     return (
         <div className='max-w-7xl mx-auto px-4 my-10'>
 
-            <h1 className='font-bold text-xl md:text-2xl'>Full Stack Developer</h1>
+            <h1 className='font-bold text-xl md:text-2xl'>{singleJob?.title}</h1>
             {/* Badges and Apply Button */}
             <div className='flex flex-col md:flex-row items-start md:items-center justify-between mt-2 space-y-4 md:space-y-0'>
                 {/* Badges */}
                 <div className='flex flex-wrap items-center gap-2'>
-                    <Badge className='text-blue-700 font-bold' variant='ghost'>Positions</Badge>
-                    <Badge className='text-[#F83002] font-bold' variant='ghost'>Part Time</Badge>
-                    <Badge className='text-[#7209b7] font-bold' variant='ghost'>24LPA</Badge>
+                    <Badge className='text-blue-700 font-bold' variant='ghost'>{singleJob?.position}Positions</Badge>
+                    <Badge className='text-[#F83002] font-bold' variant='ghost'>Job type: {singleJob?.jobType}</Badge>
+                    <Badge className='text-[#7209b7] font-bold' variant='ghost'>{singleJob?.salary} LPA</Badge>
                 </div>
                 {/* Apply Button */}
                 <Button
@@ -30,13 +66,13 @@ const JobDescription = () => {
             {/* Job Description Section */}
             <h1 className='border-b-2 border-b-gray-300 font-medium mt-5 text-lg'>Job Description</h1>
             <div className='mt-4'>
-                <h1 className='font-bold mt-2'>Role: <span className='text-gray-800 font-normal pl-4'>Full Stack Developer</span></h1>
-                <h1 className='font-bold mt-2'>Location: <span className='text-gray-800 font-normal pl-4'>Kochi, India</span></h1>
-                <h1 className='font-bold mt-2'>Description: <span className='text-gray-800 font-normal pl-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span></h1>
-                <h1 className='font-bold mt-2'>Skills: <span className='text-gray-800 font-normal pl-4'>Html, Css, Javascript, React</span></h1>
-                <h1 className='font-bold mt-2'>Experience: <span className='text-gray-800 font-normal pl-4'>Fresher</span></h1>
-                <h1 className='font-bold mt-2'>Salary: <span className='text-gray-800 font-normal pl-4'>8LPA</span></h1>
-                <h1 className='font-bold mt-2'>Posted On: <span className='text-gray-800 font-normal pl-4'>23 Jan 2024</span></h1>
+                <h1 className='font-bold mt-2'>Role: <span className='text-gray-800 font-normal pl-4'>{singleJob?.title}</span></h1>
+                <h1 className='font-bold mt-2'>Location: <span className='text-gray-800 font-normal pl-4'>{singleJob?.location}</span></h1>
+                <h1 className='font-bold mt-2'>Description: <span className='text-gray-800 font-normal pl-4'>{singleJob?.description}</span></h1>
+                <h1 className='font-bold mt-2'>Total Applicant: <span className='text-gray-800 font-normal pl-4'>{singleJob?.applications.length}</span></h1>
+                <h1 className='font-bold mt-2'>Experience: <span className='text-gray-800 font-normal pl-4'>{singleJob?.experienceLevel} Year</span></h1>
+                <h1 className='font-bold mt-2'>Salary: <span className='text-gray-800 font-normal pl-4'>{singleJob?.salary} LPA</span></h1>
+                <h1 className='font-bold mt-2'>Posted On: <span className='text-gray-800 font-normal pl-4'>{formatDate(singleJob?.createdAt)=== 0 ? "Today" : `${formatDate(singleJob?.createdAt)} Days Ago`}</span></h1>
             </div>
 
         </div>
