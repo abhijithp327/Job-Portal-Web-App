@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 
-const Job = () => {
+const Job = ({ job }) => {
 
     const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const Job = () => {
     return (
         <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100'>
             <div className='flex items-center justify-between mb-3'>
-                <p className='text-sm text-gray-500'>2 days ago</p>
+                <p className='text-sm text-gray-500'>{job?.createdAt}</p>
                 <Button variant='outline' className='rounded-full' size='icon'>
                     <Bookmark />
                 </Button>
@@ -29,24 +29,24 @@ const Job = () => {
                     </Avatar>
                 </Button>
                 <div>
-                    <h1 className='font-medium text-lg'>Liverpool</h1>
-                    <p className='text-sm text-gray-600'>India</p>
+                    <h1 className='font-medium text-lg'>{job?.company.name}</h1>
+                    <p className='text-sm text-gray-600'>{job?.location}</p>
                 </div>
             </div>
             {/* Job Description */}
             <div>
-                <h1 className='font-bold text-lg mb-2'>Title</h1>
-                <p className='text-sm text-gray-600'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut dolor voluptatum voluptas eos nemo earum nisi nulla, ipsam facilis laboriosam!</p>
+                <h1 className='font-bold text-lg mb-2'>{job?.title}</h1>
+                <p className='text-sm text-gray-600'>{job?.description}</p>
             </div>
             {/* Badges */}
             <div className='flex flex-wrap items-center gap-2 mt-4'>
-                <Badge className='text-blue-700 font-bold' variant='ghost'>Positions</Badge>
-                <Badge className='text-[#F83002] font-bold' variant='ghost'>Part Time</Badge>
-                <Badge className='text-[#7209b7] font-bold' variant='ghost'>24LPA</Badge>
+                <Badge className='text-blue-700 font-bold' variant='ghost'>{job?.position} positions</Badge>
+                <Badge className='text-[#F83002] font-bold' variant='ghost'>Job type: {job?.jobType}</Badge>
+                <Badge className='text-[#7209b7] font-bold' variant='ghost'>Salary: {job?.salary}</Badge>
             </div>
              {/* Action Buttons */}
             <div className='flex flex-wrap items-center gap-4 mt-4'>
-                <Button variant='outline' onClick={() => navigate(`/description/${jobId}`)} >Details</Button>
+                <Button variant='outline' onClick={() => navigate(`/description/${job._id}`)} >Details</Button>
                 <Button className='bg-[#7209b7] hover:bg-[#4e298f]'>Save for later</Button>
             </div>
         </div>
