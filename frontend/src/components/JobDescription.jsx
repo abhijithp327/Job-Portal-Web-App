@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { setSingleJob } from '@/redux/jobSlice';
-import { JOB_API_END_POINT } from '@/utils/constant';
+import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from '@/utils/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDate } from '@/utils/formatDate';
 import { toast } from 'sonner';
@@ -20,7 +20,9 @@ const JobDescription = () => {
 
     const { user } = useSelector(state => state.auth);
 
-    const isApplied = singleJob?.applications?.some(application => application?.applicant === user?.userId || false);
+    const isInitiallyApplied = singleJob?.applications?.some(application => application?.applicant === user?.userId || false);
+
+    const [isApplied, setIsApplied] = React.useState(isInitiallyApplied);
 
     React.useEffect(() => {
         const fetchSingleJob = async () => {
@@ -34,6 +36,7 @@ const JobDescription = () => {
 
                 if (response.data.status === 200) {
                     dispatch(setSingleJob(response.data.result));
+                    setIsApplied(response.data.result?.applications?.some(application => application?.applicant === user?.userId));
                 };
 
             } catch (error) {
@@ -47,11 +50,17 @@ const JobDescription = () => {
     const applyJobHandler = async () => {
         try {
 
-            const response = await axios.post(`${JOB_API_END_POINT}/apply-job`, {
-                withCredentials: true
-            })
+            const response = await axios.post(
+                `${APPLICATION_API_END_POINT}/apply-job/${jobId}`,
+                {},  // Include an empty object here to match the POST request body format
+                { withCredentials: true }
+            );
 
+            console.log(response);
             if (response.data.status === 200) {
+                setIsApplied(true);
+                const updateSingleJob = {...singleJob, applications:[...singleJob.applications, { applicant: user?.userId }]};
+                dispatch(setSingleJob(updateSingleJob));
                 toast(response.data.message);
             }
 
@@ -75,6 +84,7 @@ const JobDescription = () => {
                 </div>
                 {/* Apply Button */}
                 <Button
+                    onClick={isApplied ? null : applyJobHandler}
                     variant="outline"
                     disabled={isApplied}
                     className={`rounded-lg ${isApplied ? "bg-gray-800 cursor-not-allowed text-white" : "bg-[#7209b7] text-white hover:bg-[#4e298f] hover:text-white"}`}>
