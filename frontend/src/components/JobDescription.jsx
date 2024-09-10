@@ -7,6 +7,7 @@ import { setSingleJob } from '@/redux/jobSlice';
 import { JOB_API_END_POINT } from '@/utils/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDate } from '@/utils/formatDate';
+import { toast } from 'sonner';
 
 const JobDescription = () => {
 
@@ -18,6 +19,8 @@ const JobDescription = () => {
     const { singleJob } = useSelector(state => state.job);
 
     const { user } = useSelector(state => state.auth);
+
+    const isApplied = singleJob?.applications?.some(application => application?.applicant === user?.userId || false);
 
     React.useEffect(() => {
         const fetchSingleJob = async () => {
@@ -40,7 +43,23 @@ const JobDescription = () => {
         fetchSingleJob();
     }, [jobId, dispatch]);
 
-    const isApplied = false;
+
+    const applyJobHandler = async () => {
+        try {
+
+            const response = await axios.post(`${JOB_API_END_POINT}/apply-job`, {
+                withCredentials: true
+            })
+
+            if (response.data.status === 200) {
+                toast(response.data.message);
+            }
+
+        } catch (error) {
+            toast(error.response.data.message);
+            console.log(error);
+        }
+    };
 
     return (
         <div className='max-w-7xl mx-auto px-4 my-10'>
@@ -72,7 +91,7 @@ const JobDescription = () => {
                 <h1 className='font-bold mt-2'>Total Applicant: <span className='text-gray-800 font-normal pl-4'>{singleJob?.applications.length}</span></h1>
                 <h1 className='font-bold mt-2'>Experience: <span className='text-gray-800 font-normal pl-4'>{singleJob?.experienceLevel} Year</span></h1>
                 <h1 className='font-bold mt-2'>Salary: <span className='text-gray-800 font-normal pl-4'>{singleJob?.salary} LPA</span></h1>
-                <h1 className='font-bold mt-2'>Posted On: <span className='text-gray-800 font-normal pl-4'>{formatDate(singleJob?.createdAt)=== 0 ? "Today" : `${formatDate(singleJob?.createdAt)} Days Ago`}</span></h1>
+                <h1 className='font-bold mt-2'>Posted On: <span className='text-gray-800 font-normal pl-4'>{formatDate(singleJob?.createdAt) === 0 ? "Today" : `${formatDate(singleJob?.createdAt)} Days Ago`}</span></h1>
             </div>
 
         </div>

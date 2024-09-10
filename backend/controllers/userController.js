@@ -217,11 +217,13 @@ export const updateProfile = async (req, res) => {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
 
         const file = req.file;
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-        console.log(file);
 
+        let cloudResponse;
 
+        if (file) {
+            const fileUri = getDataUri(file);
+            cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        }
 
         let skillsArray
 
@@ -258,7 +260,7 @@ export const updateProfile = async (req, res) => {
 
         if (cloudResponse) {
             updatedFields.profile.resume = cloudResponse.secure_url;
-            updatedFields.profile.resumeOriginalName = file.originalname;
+            updatedFields.profile.resumeOriginalName = file?.originalname;
         }
 
         const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, { new: true, select: "-password" });
