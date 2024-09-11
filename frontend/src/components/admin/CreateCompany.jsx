@@ -31,9 +31,9 @@ const CreateCompany = () => {
 
             if (response.data.status === 200) {
                 dispatch(setSingleCompany(response.data.result.company));
-                setLoading(false);
+                // setLoading(false);
                 toast.success(response.data.message);
-                const companyId = response?.data?.result?.company._id;
+                const companyId = response?.data?.result?._id;
                 navigate(`/admin/companies/${companyId}`);
             }
         } catch (error) {
