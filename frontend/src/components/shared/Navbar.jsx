@@ -106,12 +106,19 @@ const Navbar = () => {
                                     </div>
                                     {/* Profile and Logout Buttons */}
                                     <div className='flex flex-col my-2 cursor-pointer text-gray-600'>
-                                        <div className='flex w-fit items-center gap-2 cursor-pointer'>
-                                            <User2 />
-                                            <Button variant='link'>
-                                                <Link to='/profile'>View Profile</Link>
-                                            </Button>
-                                        </div>
+                                        {
+                                            user && user.role === 'student' && (
+
+                                                <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                    <User2 />
+                                                    <Button variant='link'>
+                                                        <Link to='/profile'>View Profile</Link>
+                                                    </Button>
+                                                </div>
+
+                                            )
+                                        }
+
                                         <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                             <LogOut />
                                             <Button onClick={logoutHandler} variant='link'>Logout</Button>
@@ -157,10 +164,14 @@ const Navbar = () => {
                             </div>
                         ) : (
                             <div className='mt-4 flex flex-col gap-2'>
-                                <Button variant='link' className='flex items-center gap-2'>
-                                    <User2 />
-                                    <Link to='/profile'>View Profile</Link>
-                                </Button>
+
+                                { user && user.role === 'student' && (
+                                    <Button variant='link' className='flex items-center gap-2'>
+                                        <User2 />
+                                        <Link to='/profile'>View Profile</Link>
+                                    </Button>
+                                )}
+
                                 <Button onClick={logoutHandler} variant='link' className='flex items-center gap-2'><LogOut />Logout</Button>
                             </div>
                         )}
