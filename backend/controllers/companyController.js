@@ -139,8 +139,6 @@ export const updateCompany = async (req, res) => {
 
         const logo = cloudResponse.secure_url;
 
-        console.log(req.body);
-
         const updatedCompany = await Company.findByIdAndUpdate(companyId, {
             name: companyName,
             description,
