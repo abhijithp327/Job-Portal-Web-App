@@ -13,7 +13,7 @@ const Job = ({ job }) => {
 
     const navigate = useNavigate();
 
-    const jobId = "9768789";
+    // const jobId = "9768789";
 
     return (
         <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100'>
