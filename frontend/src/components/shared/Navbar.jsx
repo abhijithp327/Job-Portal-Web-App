@@ -63,9 +63,20 @@ const Navbar = () => {
                 <div className='hidden sm:flex items-center gap-6 sm:gap-10'>
                     {/* Navbar Links */}
                     <ul className='flex font-medium gap-3 sm:gap-5'>
-                        <li><Link to={'/'}>Home</Link></li>
-                        <li><Link to={'/jobs'}>Jobs</Link></li>
-                        <li><Link to={'/browse'}>Browse</Link></li>
+                        {
+                            user && user.role === 'recruiter' ? (
+                                <>
+                                    <li><Link to={'/admin/companies'}>Companies</Link></li>
+                                    <li><Link to={'/admin/jobs'}>Jobs</Link></li>
+                                </>
+                            ) : (
+                                <>
+                                    <li><Link to={'/'}>Home</Link></li>
+                                    <li><Link to={'/jobs'}>Jobs</Link></li>
+                                    <li><Link to={'/browse'}>Browse</Link></li>
+                                </>
+                            )
+                        }
                     </ul>
 
                     {/* User Actions: Login/Signup or Avatar */}
@@ -94,7 +105,7 @@ const Navbar = () => {
                                         </div>
                                     </div>
                                     {/* Profile and Logout Buttons */}
-                                    <div className='flex flex-col my-2 cursor-pointer'>
+                                    <div className='flex flex-col my-2 cursor-pointer text-gray-600'>
                                         <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                             <User2 />
                                             <Button variant='link'>
@@ -119,9 +130,20 @@ const Navbar = () => {
                     <div className='px-4 pt-2 pb-3 space-y-1'>
                         {/* Navbar Links */}
                         <ul className='flex flex-col items-start font-medium gap-3'>
-                            <li>Home</li>
-                            <li>Jobs</li>
-                            <li>Browse</li>
+                            {
+                                user && user.role === 'recruiter' ? (
+                                    <>
+                                        <li><Link to={'/admin/companies'}>Companies</Link></li>
+                                        <li><Link to={'/admin/jobs'}>Jobs</Link></li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li><Link to={'/'}>Home</Link></li>
+                                        <li><Link to={'/jobs'}>Jobs</Link></li>
+                                        <li><Link to={'/browse'}>Browse</Link></li>
+                                    </>
+                                )
+                            }
                         </ul>
                         {/* User Actions: Login/Signup or Avatar */}
                         {!user ? (
