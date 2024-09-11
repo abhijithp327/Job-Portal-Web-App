@@ -2,6 +2,8 @@ import Joi from 'joi';
 import getErrorsInArray from "../utils/getErrors.js";
 import { joiOptions } from "../utils/joiOptions.js";
 import Company from "../models/companyModel.js";
+import getDataUri from '../utils/dataUri.js';
+import cloudinary from '../utils/cloudinary.js';
 
 
 export const registerCompany = async (req, res) => {
@@ -68,15 +70,7 @@ export const getUserCompany = async (req, res) => {
 
         const userId = req.user.userId;
 
-        const company = await Company.findOne({ userId });
-
-        if (!company) {
-            return res.status(400).json({
-                status: 400,
-                success: false,
-                message: "Company not found",
-            });
-        };
+        const company = await Company.find({ userId });
 
         res.status(200).json({
             status: 200,
@@ -137,11 +131,22 @@ export const updateCompany = async (req, res) => {
 
         const { companyName, description, website, location } = req.body;
 
+        const file = req.file;
+
+        const fileUri = getDataUri(file);
+
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+        const logo = cloudResponse.secure_url;
+
+        console.log(req.body);
+
         const updatedCompany = await Company.findByIdAndUpdate(companyId, {
             name: companyName,
             description,
             website,
-            location
+            location,
+            logo
         }, {
             new: true
         });
@@ -159,6 +164,27 @@ export const updateCompany = async (req, res) => {
             status: 500,
             success: false,
             message: "Failed to update company",
+            error: error
+        });
+    }
+};
+
+
+export const getAllCompanies = async (req, res) => {
+    try {
+        const companies = await Company.find();
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: "Companies found successfully",
+            result: companies
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: "Failed to get companies",
             error: error
         });
     }

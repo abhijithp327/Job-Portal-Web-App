@@ -3,8 +3,27 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Edit2, MoreHorizontal } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 const CompaniesTable = () => {
+  const { companies, searchCompanyName } = useSelector((state) => state.company);
+  const [filter, setFilter] = React.useState([]);
+
+  React.useEffect(() => {
+    // Only filter if companies array is not empty
+    if (companies.length > 0) {
+      const filteredCompanies = companies.filter((company) => {
+        if (!searchCompanyName) {
+          return true; // If no search term, return all companies
+        }
+        return company?.name?.toLowerCase().includes(searchCompanyName?.toLowerCase());
+      });
+      setFilter(filteredCompanies);
+    } else {
+      setFilter([]); // If companies are empty, set filter to an empty array
+    }
+  }, [companies, searchCompanyName]);
+
   return (
     <div className='overflow-x-auto'>
       <Table className='w-full'>
@@ -18,29 +37,34 @@ const CompaniesTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell>
-              <Avatar className='w-10 h-10'>
-                <AvatarImage src='https://i.pinimg.com/736x/b0/33/c1/b033c1e388efef133716a5364a056ed9.jpg' />
-              </Avatar>
-            </TableCell>
-            <TableCell>Microsoft</TableCell>
-            <TableCell>17-04-2025</TableCell>
-            <TableCell className='text-right'>
-              <Popover>
-                <PopoverTrigger className='cursor-pointer'>
-                  <MoreHorizontal />
-                </PopoverTrigger>
-                <PopoverContent className='w-20 md:w-32'>
-                  <div className='flex items-center justify-center'>
-                    <Edit2 className='w-4 mr-2 cursor-pointer' />
-                    <span>Edit</span>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </TableCell>
-          </TableRow>
-          {/* Add more rows as needed */}
+          {filter.length === 0 ? (
+            <span>You haven't registered any companies yet.</span>
+          ) : (
+            filter.map((company, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <Avatar className='w-10 h-10'>
+                    <AvatarImage src={company?.logo} />
+                  </Avatar>
+                </TableCell>
+                <TableCell>{company?.name}</TableCell>
+                <TableCell>{company?.createdAt.split("T")[0]}</TableCell>
+                <TableCell className='text-right'>
+                  <Popover>
+                    <PopoverTrigger className='cursor-pointer'>
+                      <MoreHorizontal />
+                    </PopoverTrigger>
+                    <PopoverContent className='w-20 md:w-32'>
+                      <div className='flex items-center justify-center'>
+                        <Edit2 className='w-4 mr-2 cursor-pointer' />
+                        <span>Edit</span>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
