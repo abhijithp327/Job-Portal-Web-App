@@ -6,17 +6,38 @@ import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { COMPANY_API_END_POINT } from '@/utils/constant';
+import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
+import { setSingleCompany } from '@/redux/companySlice';
 
 const CreateCompany = () => {
 
     const navigate = useNavigate();
 
+    const dispatch = useDispatch();
+
+    const [loading, setLoading] = React.useState(false);
+
+    const [companyName, setCompanyName] = React.useState('');
+
     const registerCompany = async () => {
         try {
-            const response = await axios.post(`${COMPANY_API_END_POINT}/register-company`, {
+            const response = await axios.post(`${COMPANY_API_END_POINT}/register-company`, { companyName }, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 withCredentials: true
-            })
+            });
+
+            if (response.data.status === 200) {
+                dispatch(setSingleCompany(response.data.result.company));
+                setLoading(false);
+                toast.success(response.data.message);
+                const companyId = response?.data?.result?.company._id;
+                navigate(`/admin/companies/${companyId}`);
+            }
         } catch (error) {
+            toast.error(error.response.data.message);
             console.log(error);
         }
     };
@@ -37,6 +58,7 @@ const CreateCompany = () => {
                         type='text'
                         placeholder='Company Name'
                         className='mt-2 w-full'
+                        onChange={(e) => setCompanyName(e.target.value)}
                     />
                 </div>
 
