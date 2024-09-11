@@ -5,6 +5,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { COMPANY_API_END_POINT } from '@/utils/constant';
 
 const CreateCompany = () => {
 
@@ -12,9 +13,9 @@ const CreateCompany = () => {
 
     const registerCompany = async () => {
         try {
-const response = await axios.post(`${COMPANY_API_END_POINT}/create-company`, {
-    
-})
+            const response = await axios.post(`${COMPANY_API_END_POINT}/register-company`, {
+                withCredentials: true
+            })
         } catch (error) {
             console.log(error);
         }
