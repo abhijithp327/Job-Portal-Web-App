@@ -2,6 +2,13 @@ import React from 'react';
 import Navbar from '../shared/Navbar';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { useSelector } from 'react-redux';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+
+
+
+const companyArray = []
 
 const PostJob = () => {
 
@@ -16,6 +23,8 @@ const PostJob = () => {
         position: 0,
         company: ''
     });
+
+    const { companies } = useSelector(state => state.company);
 
     const changeEventHandler = (event) => {
         setInput({
@@ -122,22 +131,39 @@ const PostJob = () => {
                             />
                         </div>
 
-                        <div className=''>
-                            <Label>Company</Label>
-                            <Input
-                                type='text'
-                                name='experience'
-                                className='focus-visible:ring-offset-0 focus-visible:ring-0 mt-1'
-                                value={input.company}
-                                onChange={changeEventHandler}
-                            />
-                        </div>
+                        {
+                            companies.length > 0 && (
+                                <Select>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="Select a company" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {
+                                                companies?.map((company) => {
+                                                    return (
+                                                        <SelectItem key={company._id} value={company._id}>{company?.name}</SelectItem>
+                                                    )
+                                                })
+                                            }
+
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )
+                        }
 
                     </div>
 
+                    {/* button */}
+
+                    <Button className='w-full mt-4'>Post New Job</Button>
+                    {
+                        companies.length === 0 && <p className='text-red-500 font-bold text-center mt-3'> Please register a company first, before posting </p>
+                    }
                 </form>
             </div>
-        </div>
+        </div >
     )
 };
 
