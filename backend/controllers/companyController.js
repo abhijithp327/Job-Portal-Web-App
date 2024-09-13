@@ -133,11 +133,15 @@ export const updateCompany = async (req, res) => {
 
         const file = req.file;
 
-        const fileUri = getDataUri(file);
+        let cloudResponse;
 
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        let logo;
 
-        const logo = cloudResponse.secure_url;
+        if (file) {
+            const fileUri = getDataUri(file);
+            cloudResponse = await cloudinary.uploader.upload(fileUri.content)
+            logo = cloudResponse.secure_url;
+        }
 
         const updatedCompany = await Company.findByIdAndUpdate(companyId, {
             name: companyName,

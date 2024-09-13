@@ -4,8 +4,12 @@ import { Avatar, AvatarImage } from '../ui/avatar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Edit2, MoreHorizontal } from 'lucide-react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const CompaniesTable = () => {
+
+  const navigate = useNavigate();
+
   const { companies, searchCompanyName } = useSelector((state) => state.company);
   const [filter, setFilter] = React.useState([]);
 
@@ -55,7 +59,7 @@ const CompaniesTable = () => {
                       <MoreHorizontal />
                     </PopoverTrigger>
                     <PopoverContent className='w-20 md:w-32'>
-                      <div className='flex items-center justify-center'>
+                      <div onClick={() => navigate(`/admin/companies/${company?._id}`)} className='flex items-center justify-center'>
                         <Edit2 className='w-4 mr-2 cursor-pointer' />
                         <span>Edit</span>
                       </div>

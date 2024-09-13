@@ -13,7 +13,7 @@ router.post("/login", singleUpload, login);
 // update user profile
 router.put("/update-profile", isAuthenticated, singleUpload, updateProfile);
 // logout user
-router.get("/logout", isAuthenticated, logout);
+router.get("/logout", logout);
 
 export default router;
 
