@@ -8,8 +8,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 
 
-const companyArray = []
-
 const PostJob = () => {
 
     const [input, setInput] = React.useState({
@@ -26,12 +24,24 @@ const PostJob = () => {
 
     const { companies } = useSelector(state => state.company);
 
+    console.log("companies", companies);
+
     const changeEventHandler = (event) => {
         setInput({
             ...input,
             [event.target.name]: event.target.value,
         });
     };
+
+    const selectChangeHandler = (selectedValue) => {
+        const selectedCompany = companies.find(company => company?.name?.toLowerCase() === selectedValue);
+        setInput({
+            ...input,
+            company: selectedCompany?._id
+        });
+    };
+
+
 
     return (
         <div className='pt-16'>
@@ -133,7 +143,7 @@ const PostJob = () => {
 
                         {
                             companies.length > 0 && (
-                                <Select>
+                                <Select onValueChange={selectChangeHandler}>
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select a company" />
                                     </SelectTrigger>
@@ -142,7 +152,7 @@ const PostJob = () => {
                                             {
                                                 companies?.map((company) => {
                                                     return (
-                                                        <SelectItem key={company._id} value={company._id}>{company?.name}</SelectItem>
+                                                        <SelectItem key={company._id} value={company?.name?.toLowerCase()}>{company?.name}</SelectItem>
                                                     )
                                                 })
                                             }
