@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import './App.css'
-import Navbar from './components/shared/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
@@ -14,7 +12,6 @@ import CreateCompany from './components/admin/CreateCompany';
 import Company from './components/admin/Company';
 import AdminJobs from './components/admin/AdminJobs';
 import PostJob from './components/admin/PostJob';
-
 
 
 
@@ -83,4 +80,4 @@ function App() {
   )
 };
 
-export default App
+export default App;
