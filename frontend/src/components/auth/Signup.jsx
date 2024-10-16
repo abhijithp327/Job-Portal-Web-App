@@ -53,6 +53,7 @@ const Signup = () => {
         };
 
         try {
+            
             dispatch(setLoading(true));
             const response = await axios.post(`${USER_API_END_POINT}/register`, formData, {
                 headers: {
