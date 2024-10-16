@@ -15,7 +15,6 @@ import { Loader2 } from 'lucide-react';
 const Signup = () => {
 
     const navigate = useNavigate();
-
     const dispatch = useDispatch();
 
     const { loading } = useSelector((state) => state.auth);
